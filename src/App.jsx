@@ -10,13 +10,23 @@ function App() {
   const room = joinRoom(trysteroConfig, roomId);
 
    const [sendColor, getColor] = room.makeAction("color");
+   const [sendTranscription, getTranscription] = room.makeAction("transcrib");
    const [myColor, setMyColor] = useState("#c0ffee");
    const [peerColors, setPeerColors] = useState({});
+   const [myMessages, setMyMessages] = useState([])
+   const [peerMessages, setPeerMessages] = useState([])
 
    // whenever a new peer joins, send my color to them
    room.onPeerJoin((peer) => sendColor(myColor, peer));
 
    getColor((color, peer) => setPeerColors((peerColors) => ({ ...peerColors, [peer]: color })));
+
+   getTranscription((transcription, peer) =>
+     setPeerMessages((peerMessages) => {
+       console.log(peer);
+       return [...peerMessages, transcription];
+     })
+   );
 
    const updateColor = (e) => {
      const { value } = e.target;
@@ -40,6 +50,11 @@ function App() {
           <li key={peerId} style={{ backgroundColor: color }}>
             {peerId}: {color}
           </li>
+        ))}
+      </ul>
+      <ul>
+        {peerMessages.map((message) => (
+          <li key={message}>{message}</li>
         ))}
       </ul>
     </>
