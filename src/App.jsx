@@ -38,13 +38,6 @@ function App() {
 
   return (
     <>
-      {/* <div id="debridgeWidget" /> */}
-      <h1>Trystero + React</h1>
-
-      <h2>My color:</h2>
-      <input type="color" value={myColor} onChange={updateColor} />
-
-      <h2>Peer colors:</h2>
       <ul>
         {Object.entries(peerColors).map(([peerId, color]) => (
           <li key={peerId} style={{ backgroundColor: color }}>
