@@ -39,13 +39,6 @@ function App() {
   return (
     <>
       <ul>
-        {Object.entries(peerColors).map(([peerId, color]) => (
-          <li key={peerId} style={{ backgroundColor: color }}>
-            {peerId}: {color}
-          </li>
-        ))}
-      </ul>
-      <ul>
         {peerMessages.map((message) => (
           <li key={message}>{message}</li>
         ))}
