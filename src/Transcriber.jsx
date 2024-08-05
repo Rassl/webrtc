@@ -6,6 +6,8 @@ import { LanguageSelector } from "./components/LanguageSelector";
 
 const IS_WEBGPU_AVAILABLE = !!navigator.gpu;
 
+// test
+
 const WHISPER_SAMPLING_RATE = 16_000;
 const MAX_AUDIO_LENGTH = 30; // seconds
 const MAX_SAMPLES = WHISPER_SAMPLING_RATE * MAX_AUDIO_LENGTH;
