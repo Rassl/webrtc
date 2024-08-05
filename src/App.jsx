@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import './App.css'
 import { joinRoom } from "trystero";
+import { SocketHandler } from './SocketWrapper';
+import { Transcriber } from './Transcriber';
 const trysteroConfig = { appId: "thurn-und-taxis" };
 
 const roomId = 'rasuls-room'
@@ -9,39 +11,37 @@ const roomId = 'rasuls-room'
 function App() {
   const room = joinRoom(trysteroConfig, roomId);
 
-   const [sendColor, getColor] = room.makeAction("color");
-   const [myColor, setMyColor] = useState("#c0ffee");
-   const [peerColors, setPeerColors] = useState({});
+   const [sendTranscription, getTranscription] = room.makeAction("transcrib");
+   const [myMessages, setMyMessages] = useState([])
+   const [peerMessages, setPeerMessages] = useState([])
+
+   const handleMessage = (message) => {
+    const newMessages = [...myMessages, message];
+    sendTranscription(message)
+    setMyMessages(newMessages);
+   }
+
 
    // whenever a new peer joins, send my color to them
-   room.onPeerJoin((peer) => sendColor(myColor, peer));
 
-   getColor((color, peer) => setPeerColors((peerColors) => ({ ...peerColors, [peer]: color })));
+   getTranscription((transcription, peer) =>
+     setPeerMessages((peerMessages) => {
+       console.log(peer);
+       return peerMessages;
+     })
+   );
 
-   const updateColor = (e) => {
-     const { value } = e.target;
-
-     setMyColor(value);
-     // when updating my own color, broadcast it to all peers
-     sendColor(value);
-   };
 
   return (
     <>
-      {/* <div id="debridgeWidget" /> */}
-      <h1>Trystero + React</h1>
-
-      <h2>My color:</h2>
-      <input type="color" value={myColor} onChange={updateColor} />
-
-      <h2>Peer colors:</h2>
-      <ul>
-        {Object.entries(peerColors).map(([peerId, color]) => (
-          <li key={peerId} style={{ backgroundColor: color }}>
-            {peerId}: {color}
-          </li>
+      <SocketHandler handleMessage={handleMessage} />
+      <Transcriber onMessageUpdate={handleMessage} />
+      {/* <ul>
+        {peerMessages.map((message) => (
+          <li key={message}>{message}</li>
         ))}
-      </ul>
+      </ul> */}
+      <p>{peerMessages}</p>
     </>
   );
 }
