@@ -24,17 +24,14 @@ function App() {
 
    // whenever a new peer joins, send my color to them
 
-   getTranscription((transcription, peer) =>
-     setPeerMessages((peerMessages) => {
-       console.log(peer);
-       return peerMessages;
-     })
-   );
+   getTranscription((transcription) => {
+    setPeerMessages(transcription)}
+  );
 
 
   return (
     <>
-      <SocketHandler handleMessage={handleMessage} />
+      {/* <SocketHandler handleMessage={handleMessage} /> */}
       <Transcriber onMessageUpdate={handleMessage} />
       {/* <ul>
         {peerMessages.map((message) => (
